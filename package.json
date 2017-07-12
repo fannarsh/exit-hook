@@ -35,5 +35,8 @@
   ],
   "devDependencies": {
     "ava": "0.0.4"
+  },
+  "dependencies": {
+    "after": "0.8.2"
   }
 }

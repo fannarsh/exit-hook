@@ -1,5 +1,7 @@
 'use strict';
 
+var after = require('after');
+
 var cbs = [];
 var called = false;
 
@@ -10,13 +12,19 @@ function exit(exit, signal) {
 
 	called = true;
 
-	cbs.forEach(function (el) {
-		el();
+	var next = after(cbs.length, function (err) {
+		if (err) {
+			throw err;
+		}
+
+		if (exit === true) {
+			process.exit(128 + signal);
+		}
 	});
 
-	if (exit === true) {
-		process.exit(128 + signal);
-	}
+	cbs.forEach(function (el) {
+		el(next);
+	});
 };
 
 module.exports = function (cb) {
